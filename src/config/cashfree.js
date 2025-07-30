@@ -1,10 +1,11 @@
 // Cashfree Payment Gateway Configuration
 export const CASHFREE_CONFIG = {
   // Get App ID from environment variables (secure approach)
-  app_id: import.meta.env.VITE_CASHFREE_APP_ID || 'TEST_APP_ID',
-  
+  // Fallback to hardcoded value if env var not working
+  app_id: import.meta.env.VITE_CASHFREE_APP_ID || '618687142514b1e6f89fdcac88786816',
+
   // Environment (SANDBOX for testing, PRODUCTION for live)
-  environment: import.meta.env.VITE_CASHFREE_MODE || 'SANDBOX',
+  environment: import.meta.env.VITE_CASHFREE_MODE || 'PRODUCTION',
   
   // Business Details
   name: import.meta.env.VITE_BUSINESS_NAME || 'YouTube Automation Ebook',
