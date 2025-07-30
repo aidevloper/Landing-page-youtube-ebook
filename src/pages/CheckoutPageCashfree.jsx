@@ -112,6 +112,7 @@ const CheckoutPage = () => {
 
   const handlePaymentSuccess = (paymentData) => {
     console.log('✅ REAL Payment successful:', paymentData);
+    setPaymentStatus('success');
 
     // Show success message for real payment
     const message = paymentData.userConfirmed
