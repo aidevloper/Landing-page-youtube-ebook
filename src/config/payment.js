@@ -1,10 +1,10 @@
-// Payment Gateway Configuration
+// Payment Gateway Configuration with Environment Variables
 export const RAZORPAY_CONFIG = {
-  // Test Key - Replace with your actual Razorpay key in production
-  key_id: 'rzp_test_9999999999',
+  // Get Key ID from environment variables (secure approach)
+  key_id: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_9999999999',
   
   // Business Details
-  name: 'YouTube Automation Ebook',
+  name: import.meta.env.VITE_BUSINESS_NAME || 'YouTube Automation Ebook',
   description: 'AI-Powered YouTube Automation System',
   image: '/favicon.ico',
   
@@ -16,14 +16,19 @@ export const RAZORPAY_CONFIG = {
   // Currency
   currency: 'INR',
   
-  // Test Mode (set to false in production)
-  test_mode: true
+  // Mode (test/live)
+  mode: import.meta.env.VITE_RAZORPAY_MODE || 'test',
+  
+  // Test Mode check
+  get test_mode() {
+    return this.mode === 'test';
+  }
 };
 
 export const PRODUCT_CONFIG = {
   name: 'AI YouTube Automation Ebook',
   description: 'Complete system for building six-figure faceless YouTube channels',
-  price: 999, // Price in INR
+  price: parseInt(import.meta.env.VITE_PRODUCT_PRICE) || 999, // Price in INR
   originalPrice: 1499,
   currency: '₹',
   bonusValue: 70000,
@@ -66,3 +71,36 @@ export const PAYMENT_METHODS = [
     description: 'All major banks supported'
   }
 ];
+
+// Validation function to check if Razorpay is properly configured
+export const validateRazorpayConfig = () => {
+  const keyId = RAZORPAY_CONFIG.key_id;
+  
+  if (!keyId || keyId === 'rzp_test_9999999999' || keyId === 'rzp_test_YOUR_KEY_ID_HERE') {
+    console.warn('⚠️ Razorpay not configured with actual credentials. Using demo mode.');
+    return false;
+  }
+  
+  if (keyId.startsWith('rzp_test_')) {
+    console.info('🧪 Razorpay configured in TEST mode');
+    return true;
+  }
+  
+  if (keyId.startsWith('rzp_live_')) {
+    console.info('🔴 Razorpay configured in LIVE mode');
+    return true;
+  }
+  
+  console.error('❌ Invalid Razorpay key format');
+  return false;
+};
+
+// Get environment info
+export const getEnvironmentInfo = () => {
+  return {
+    mode: RAZORPAY_CONFIG.mode,
+    keyConfigured: validateRazorpayConfig(),
+    keyId: RAZORPAY_CONFIG.key_id?.substring(0, 12) + '...', // Partial key for debugging
+    businessName: RAZORPAY_CONFIG.name
+  };
+};
