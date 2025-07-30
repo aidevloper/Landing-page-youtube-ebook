@@ -4,7 +4,7 @@ import Header from '../components/ui/Header';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Icon from '../components/AppIcon';
-import CashfreeConfigTest from '../components/CashfreeConfigTest';
+
 import { CASHFREE_CONFIG, PRODUCT_CONFIG, validateCashfreeConfig, getEnvironmentInfo } from '../config/cashfree';
 import { processRealCashfreePayment, openPaymentInNewWindow, validatePaymentConfig } from '../services/realCashfreeService';
 
@@ -29,7 +29,7 @@ const CheckoutPage = () => {
   useEffect(() => {
     // Log environment info for debugging
     const envInfo = getEnvironmentInfo();
-    console.log('���� Cashfree Environment:', envInfo);
+    console.log('🔧 Cashfree Environment:', envInfo);
     
     // Validate configuration
     validateCashfreeConfig();
@@ -273,8 +273,7 @@ const CheckoutPage = () => {
             </p>
           </div>
 
-          {/* Configuration Test - Temporary Debug */}
-          <CashfreeConfigTest />
+
 
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-12">
