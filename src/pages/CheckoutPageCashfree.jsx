@@ -199,7 +199,7 @@ const CheckoutPage = () => {
                 <>
                   App ID: {envInfo.appId} | Environment: {envInfo.environment}
                   <br />
-                  <span className="text-xs">Real payments will be processed. Fallback to demo mode if SDK fails.</span>
+                  <span className="text-xs font-semibold">🔴 REAL PAYMENTS ACTIVE - Customers will be charged actual money</span>
                 </>
               ) : (
                 <>
