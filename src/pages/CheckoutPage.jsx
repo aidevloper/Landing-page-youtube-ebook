@@ -198,14 +198,7 @@ const CheckoutPage = () => {
     }
   };
 
-  const productDetails = {
-    name: 'AI YouTube Automation Ebook',
-    description: 'Complete system for building six-figure faceless YouTube channels',
-    price: 999,
-    originalPrice: 1499,
-    currency: '₹',
-    bonusValue: 70000
-  };
+  const productDetails = PRODUCT_CONFIG;
 
   const securityFeatures = [
     { icon: 'Shield', text: 'SSL Secured' },
