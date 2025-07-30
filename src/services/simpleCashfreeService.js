@@ -23,28 +23,15 @@ export const processSimpleCashfreePayment = async (formData) => {
     // Create order
     const orderId = generateOrderId();
     
-    // In a real implementation, this would:
-    // 1. Send order data to your backend
-    // 2. Backend creates order with Cashfree API
-    // 3. Backend returns payment URL or session ID
-    // 4. Frontend redirects user to Cashfree payment page
-    
-    // Simulate the payment flow
+    // Generate real Cashfree payment URL
     const paymentUrl = generateCashfreePaymentURL(orderId, orderData);
-    
-    console.log('Payment URL:', paymentUrl);
-    
-    // For demo purposes, simulate payment success
-    await simulatePaymentFlow(formData);
-    
-    return {
-      success: true,
-      orderId: orderId,
-      paymentId: `pay_${Date.now()}`,
-      method: 'simple_cashfree',
-      amount: PRODUCT_CONFIG.price,
-      paymentUrl: paymentUrl
-    };
+
+    console.log('Real Cashfree Payment URL:', paymentUrl);
+
+    // Open payment in new window for real processing
+    const paymentResult = await openPaymentWindow(paymentUrl, orderId);
+
+    return paymentResult;
     
   } catch (error) {
     console.error('Simple payment error:', error);
