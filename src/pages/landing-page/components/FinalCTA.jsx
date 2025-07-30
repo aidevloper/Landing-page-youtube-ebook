@@ -171,6 +171,7 @@ const FinalCTA = () => {
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xl md:text-2xl px-12 py-6 mb-4 w-full sm:w-auto"
                 iconName="CreditCard"
                 iconPosition="left"
+                onClick={() => navigate('/checkout')}
               >
                 Start My YouTube Empire Now
               </Button>
