@@ -426,7 +426,10 @@ const CheckoutPage = () => {
                   {/* Payment Method */}
                   <div className="bg-white rounded-2xl shadow-lg p-8">
                     <h3 className="text-2xl font-bold text-primary mb-6 font-playfair">Payment Method</h3>
-                    
+
+                    {/* Razorpay Configuration Status */}
+                    <RazorpayStatus />
+
                     {/* Payment Options */}
                     <div className="space-y-4 mb-6">
                       {paymentMethods.map((method) => (
