@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
 
 const FinalCTA = () => {
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
     hours: 23,
     minutes: 45,
@@ -169,6 +171,7 @@ const FinalCTA = () => {
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xl md:text-2xl px-12 py-6 mb-4 w-full sm:w-auto"
                 iconName="CreditCard"
                 iconPosition="left"
+                onClick={() => navigate('/checkout')}
               >
                 Start My YouTube Empire Now
               </Button>
@@ -286,6 +289,7 @@ const FinalCTA = () => {
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xl px-10 py-4"
                 iconName="ArrowRight"
                 iconPosition="right"
+                onClick={() => navigate('/checkout')}
               >
                 Yes, I Want My YouTube Empire
               </Button>

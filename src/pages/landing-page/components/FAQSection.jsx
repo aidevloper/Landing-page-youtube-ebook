@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
 
 const FAQSection = () => {
+  const navigate = useNavigate();
   const [openFAQ, setOpenFAQ] = useState(0);
 
   const faqs = [
@@ -206,6 +208,7 @@ const FAQSection = () => {
               className="bg-emerald-600 hover:bg-emerald-600/90 text-white"
               iconName="Phone"
               iconPosition="left"
+              onClick={() => navigate('/checkout')}
             >
               Schedule Free Consultation
             </Button>
@@ -214,6 +217,7 @@ const FAQSection = () => {
               className="border-white/30 text-white hover:bg-white/10"
               iconName="MessageSquare"
               iconPosition="left"
+              onClick={() => navigate('/checkout')}
             >
               Live Chat Support
             </Button>

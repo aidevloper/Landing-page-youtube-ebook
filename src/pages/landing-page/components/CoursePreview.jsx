@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
 
 const ChapterPreview = () => {
+  const navigate = useNavigate();
   const chapters = [
     {
       id: 1,
@@ -245,6 +247,7 @@ const ChapterPreview = () => {
                   className={`w-full border-2 ${colors.border} hover:${colors.bg} transition-all duration-300 group-hover:scale-105`}
                     iconName="ArrowRight"
                     iconPosition="right"
+                    onClick={() => navigate('/checkout')}
                   >
                   Learn More
                   </Button>
@@ -269,6 +272,7 @@ const ChapterPreview = () => {
               className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 text-lg font-semibold"
               iconName="ArrowRight"
               iconPosition="right"
+              onClick={() => navigate('/checkout')}
             >
               Get My Ebook Now - ₹999
             </Button>
