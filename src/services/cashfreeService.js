@@ -28,17 +28,25 @@ const loadCashfreeSDK = () => {
 export const initializeCashfree = async () => {
   try {
     const Cashfree = await loadCashfreeSDK();
-    
+
     // Check if Cashfree object has the expected methods
     console.log('Cashfree object:', Cashfree);
-    console.log('Available methods:', Object.keys(Cashfree));
-    
+    console.log('Available methods:', Object.keys(Cashfree || {}));
+    console.log('Cashfree type:', typeof Cashfree);
+
+    // Check if it's a constructor function or direct object
+    if (typeof Cashfree === 'function') {
+      console.log('Cashfree is a constructor function');
+    } else if (typeof Cashfree === 'object') {
+      console.log('Cashfree is an object');
+    }
+
     // For Cashfree v3, initialization is different
     // No need to call init() - just configure the environment
     const config = {
       mode: CASHFREE_CONFIG.environment === 'PRODUCTION' ? 'production' : 'sandbox'
     };
-    
+
     console.log('✅ Cashfree configured with:', config);
     return Cashfree;
   } catch (error) {
