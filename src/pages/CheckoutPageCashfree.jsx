@@ -161,26 +161,46 @@ const CheckoutPage = () => {
   // Configuration status component
   const CashfreeStatus = () => {
     const isConfigured = validateCashfreeConfig();
-    
-    if (isConfigured) {
-      return null; // Don't show anything if properly configured
-    }
-    
+    const envInfo = getEnvironmentInfo();
+
     return (
-      <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
+      <div className={`rounded-xl p-4 mb-6 ${
+        isConfigured
+          ? 'bg-green-50 border border-green-200'
+          : 'bg-yellow-50 border border-yellow-200'
+      }`}>
         <div className="flex items-start space-x-3">
-          <Icon name="AlertTriangle" size={20} className="text-yellow-600 mt-0.5" />
+          <Icon
+            name={isConfigured ? "CheckCircle" : "AlertTriangle"}
+            size={20}
+            className={`mt-0.5 ${isConfigured ? 'text-green-600' : 'text-yellow-600'}`}
+          />
           <div className="text-sm">
-            <div className="font-semibold text-yellow-800 mb-1">
-              ⚙️ Demo Mode - Cashfree Not Configured
+            <div className={`font-semibold mb-1 ${
+              isConfigured ? 'text-green-800' : 'text-yellow-800'
+            }`}>
+              {isConfigured
+                ? `✅ Cashfree ${envInfo.environment} Mode Active`
+                : '⚙️ Demo Mode - Cashfree Not Configured'
+              }
             </div>
-            <div className="text-yellow-700">
-              You're using demo mode. To enable real payments:
-              <ol className="list-decimal list-inside mt-2 space-y-1 text-xs">
-                <li>Get your Cashfree App ID from dashboard</li>
-                <li>Set environment variable: VITE_CASHFREE_APP_ID</li>
-                <li>Restart the development server</li>
-              </ol>
+            <div className={isConfigured ? 'text-green-700' : 'text-yellow-700'}>
+              {isConfigured ? (
+                <>
+                  App ID: {envInfo.appId} | Environment: {envInfo.environment}
+                  <br />
+                  <span className="text-xs">Real payments will be processed. Fallback to demo mode if SDK fails.</span>
+                </>
+              ) : (
+                <>
+                  You're using demo mode. To enable real payments:
+                  <ol className="list-decimal list-inside mt-2 space-y-1 text-xs">
+                    <li>Get your Cashfree App ID from dashboard</li>
+                    <li>Set environment variable: VITE_CASHFREE_APP_ID</li>
+                    <li>Restart the development server</li>
+                  </ol>
+                </>
+              )}
             </div>
           </div>
         </div>
