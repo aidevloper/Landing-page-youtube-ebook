@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
 
 const ProblemSection = () => {
+  const navigate = useNavigate();
   const [selectedProblem, setSelectedProblem] = useState('time');
 
   const problems = [
@@ -207,6 +209,7 @@ const ProblemSection = () => {
             className="bg-emerald-600 hover:bg-emerald-700 text-white"
             iconName="ArrowDown"
             iconPosition="right"
+            onClick={() => navigate('/checkout')}
           >
             See How AI Solves Everything
           </Button>
