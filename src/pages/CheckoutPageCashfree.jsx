@@ -166,15 +166,7 @@ const CheckoutPage = () => {
     { icon: 'Award', text: '94.7% Success Rate', desc: 'Proven results' }
   ];
 
-  const handleDemoPayment = () => {
-    // Demo function for testing without real payment
-    setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
-      alert('Demo payment successful! In production, this would process a real payment.');
-      navigate('/success', { state: { paymentSuccess: true } });
-    }, 2000);
-  };
+
 
   // Configuration status component
   const CashfreeStatus = () => {
