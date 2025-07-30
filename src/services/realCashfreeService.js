@@ -173,20 +173,33 @@ export const openPaymentInNewWindow = async (formData) => {
             
             // In real implementation, you would verify payment status
             // For now, ask user to check their payment status
-            const userConfirm = confirm(
-              'Payment window was closed. Did you complete the payment successfully?'
+            const userResponse = confirm(
+              '💳 Payment Window Closed\n\n' +
+              'Did you successfully complete your payment on the Cashfree page?\n\n' +
+              '✅ Click OK if you completed the payment\n' +
+              '❌ Click Cancel if you did not complete the payment'
             );
-            
-            if (userConfirm) {
+
+            if (userResponse) {
+              console.log('✅ User confirmed payment completion');
               resolve({
                 success: true,
                 orderId: orderId,
                 paymentId: `cf_${Date.now()}`,
                 method: 'cashfree_popup',
-                userConfirmed: true
+                userConfirmed: true,
+                status: 'user_confirmed'
               });
             } else {
-              reject(new Error('Payment was not completed'));
+              console.log('❌ User indicated payment was not completed');
+              resolve({
+                success: false,
+                orderId: orderId,
+                method: 'cashfree_popup',
+                userConfirmed: false,
+                status: 'user_cancelled',
+                message: 'Payment was cancelled by user'
+              });
             }
           }
         } catch (error) {
