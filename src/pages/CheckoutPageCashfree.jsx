@@ -129,6 +129,7 @@ const CheckoutPage = () => {
 
   const handlePaymentCancelled = (paymentData) => {
     console.log('❌ Payment cancelled by user:', paymentData);
+    setPaymentStatus('cancelled');
 
     // Show cancellation message with retry option
     const retry = confirm(
@@ -143,6 +144,7 @@ const CheckoutPage = () => {
     if (retry) {
       // Reset processing state and let user try again
       console.log('🔄 User chose to retry payment');
+      setPaymentStatus(null);
       setIsProcessing(false);
       // Could automatically trigger payment again or just reset the form
     } else {
