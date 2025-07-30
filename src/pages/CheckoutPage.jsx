@@ -4,6 +4,7 @@ import Header from '../components/ui/Header';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Icon from '../components/AppIcon';
+import RazorpayStatus from '../components/RazorpayStatus';
 import { RAZORPAY_CONFIG, PRODUCT_CONFIG, validateRazorpayConfig, getEnvironmentInfo } from '../config/payment';
 
 const CheckoutPage = () => {
