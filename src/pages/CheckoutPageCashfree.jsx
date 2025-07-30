@@ -5,7 +5,7 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Icon from '../components/AppIcon';
 import { CASHFREE_CONFIG, PRODUCT_CONFIG, validateCashfreeConfig, getEnvironmentInfo } from '../config/cashfree';
-import { processCashfreePayment, verifyPayment } from '../services/cashfreeService';
+import { processCashfreePayment, processDirectPayment, verifyPayment } from '../services/cashfreeService';
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
