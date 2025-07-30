@@ -75,17 +75,29 @@ const CheckoutPage = () => {
 
       try {
         // Try Cashfree SDK first
+        console.log('🔄 Attempting Cashfree SDK payment...');
         result = await processCashfreePayment(formData);
       } catch (sdkError) {
-        console.warn('Cashfree SDK failed, trying direct payment:', sdkError);
+        console.warn('Cashfree SDK failed, trying simplified payment:', sdkError);
 
-        // Fallback to direct payment method
-        result = await processDirectPayment(formData);
+        try {
+          // Fallback to simplified Cashfree payment
+          result = await processSimpleCashfreePayment(formData);
+        } catch (simpleError) {
+          console.warn('Simplified payment failed, trying direct payment:', simpleError);
+
+          // Final fallback to direct payment method
+          result = await processDirectPayment(formData);
+        }
       }
 
       if (result.success) {
-        // Verify payment
-        await verifyPayment(result);
+        // Verify payment based on method used
+        if (result.method === 'simple_cashfree') {
+          await verifySimplePayment(result);
+        } else {
+          await verifyPayment(result);
+        }
 
         // Payment successful
         handlePaymentSuccess(result);
