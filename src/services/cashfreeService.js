@@ -5,22 +5,60 @@ import { CASHFREE_CONFIG, PRODUCT_CONFIG, generateOrderId } from '../config/cash
 const loadCashfreeSDK = () => {
   return new Promise((resolve, reject) => {
     if (window.Cashfree) {
+      console.log('Cashfree already loaded');
       resolve(window.Cashfree);
       return;
     }
 
-    const script = document.createElement('script');
-    script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
-    script.onload = () => {
-      if (window.Cashfree) {
-        console.log('✅ Cashfree SDK loaded successfully');
-        resolve(window.Cashfree);
-      } else {
-        reject(new Error('Cashfree SDK failed to load'));
+    // Try different SDK URLs
+    const sdkUrls = [
+      'https://sdk.cashfree.com/js/v3/cashfree.js',
+      'https://sdk.cashfree.com/js/v2/production/cashfree.js',
+      'https://sdk.cashfree.com/js/ui/2.0.0/cashfree.js'
+    ];
+
+    let currentUrlIndex = 0;
+
+    const tryLoadSDK = () => {
+      if (currentUrlIndex >= sdkUrls.length) {
+        reject(new Error('Failed to load Cashfree SDK from all URLs'));
+        return;
       }
+
+      const script = document.createElement('script');
+      script.src = sdkUrls[currentUrlIndex];
+
+      script.onload = () => {
+        console.log(`✅ Cashfree SDK loaded from: ${sdkUrls[currentUrlIndex]}`);
+
+        // Wait a bit for the SDK to initialize
+        setTimeout(() => {
+          if (window.Cashfree) {
+            console.log('Cashfree object available');
+            resolve(window.Cashfree);
+          } else if (window.CFCheckout) {
+            console.log('CFCheckout object available');
+            resolve(window.CFCheckout);
+          } else {
+            console.log('No Cashfree object found, trying next URL');
+            currentUrlIndex++;
+            document.head.removeChild(script);
+            tryLoadSDK();
+          }
+        }, 100);
+      };
+
+      script.onerror = () => {
+        console.log(`Failed to load from: ${sdkUrls[currentUrlIndex]}`);
+        currentUrlIndex++;
+        document.head.removeChild(script);
+        tryLoadSDK();
+      };
+
+      document.head.appendChild(script);
     };
-    script.onerror = () => reject(new Error('Failed to load Cashfree SDK'));
-    document.head.appendChild(script);
+
+    tryLoadSDK();
   });
 };
 
