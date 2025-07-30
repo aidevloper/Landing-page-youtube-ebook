@@ -28,7 +28,7 @@ const CheckoutPage = () => {
   useEffect(() => {
     // Log environment info for debugging
     const envInfo = getEnvironmentInfo();
-    console.log('🔧 Cashfree Environment:', envInfo);
+    console.log('���� Cashfree Environment:', envInfo);
     
     // Validate configuration
     validateCashfreeConfig();
@@ -389,13 +389,14 @@ const CheckoutPage = () => {
                     </div>
 
                     {/* Cashfree Info */}
-                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
                       <div className="flex items-start space-x-3">
-                        <Icon name="Info" size={20} className="text-blue-600 mt-0.5" />
+                        <Icon name="CreditCard" size={20} className="text-emerald-600 mt-0.5" />
                         <div className="text-sm">
-                          <div className="font-semibold text-blue-800 mb-1">Secure Payment via Cashfree</div>
-                          <div className="text-blue-700">
-                            Your payment is processed securely through Cashfree. We support all major payment methods including cards, UPI, net banking, and digital wallets.
+                          <div className="font-semibold text-emerald-800 mb-1">🔴 Live Payment Processing</div>
+                          <div className="text-emerald-700">
+                            <strong>Real money will be charged!</strong> Your payment is processed securely through Cashfree's live payment gateway.
+                            We support Cards, UPI, Net Banking, and Wallets with instant settlement.
                           </div>
                         </div>
                       </div>
