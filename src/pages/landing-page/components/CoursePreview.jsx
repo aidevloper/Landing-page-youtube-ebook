@@ -247,6 +247,7 @@ const ChapterPreview = () => {
                   className={`w-full border-2 ${colors.border} hover:${colors.bg} transition-all duration-300 group-hover:scale-105`}
                     iconName="ArrowRight"
                     iconPosition="right"
+                    onClick={() => navigate('/checkout')}
                   >
                   Learn More
                   </Button>
