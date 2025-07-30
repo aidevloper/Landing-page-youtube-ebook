@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from '../AppIcon';
 import Button from './Button';
 
 const Header = () => {
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('hero');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -134,7 +136,7 @@ const Header = () => {
               <Button
                 variant="default"
                 className="hidden sm:inline-flex bg-accent hover:bg-accent/90 text-accent-foreground"
-                onClick={() => scrollToSection('pricing', 80)}
+                onClick={() => navigate('/checkout')}
               >
                 Start My YouTube Empire
               </Button>
@@ -206,7 +208,7 @@ const Header = () => {
               variant="default"
               fullWidth
               className="bg-emerald-600 hover:bg-emerald-700 text-white"
-              onClick={() => scrollToSection('pricing', 80)}
+              onClick={() => navigate('/checkout')}
             >
               Start My YouTube Empire
             </Button>
@@ -219,7 +221,7 @@ const Header = () => {
         <Button
           variant="default"
           className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-cta hover:shadow-cta-hover rounded-full px-6 py-3 animation-scale-hover"
-          onClick={() => scrollToSection('pricing', 80)}
+          onClick={() => navigate('/checkout')}
           iconName="ArrowRight"
           iconPosition="right"
         >
@@ -233,7 +235,7 @@ const Header = () => {
           variant="default"
           fullWidth
           className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-cta"
-          onClick={() => scrollToSection('pricing', 80)}
+          onClick={() => navigate('/checkout')}
         >
           Start My YouTube Empire
         </Button>
