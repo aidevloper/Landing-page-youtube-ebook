@@ -4,6 +4,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import ScrollToTop from './components/ScrollToTop';
 import LandingPage from './pages/landing-page';
 import CheckoutPage from './pages/CheckoutPage';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import NotFound from './pages/NotFound';
 
 const Routes = () => {
