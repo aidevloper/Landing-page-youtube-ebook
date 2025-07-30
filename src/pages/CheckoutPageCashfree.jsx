@@ -70,42 +70,33 @@ const CheckoutPage = () => {
     try {
       setIsProcessing(true);
 
-      let result;
-
-      try {
-        // Try Cashfree SDK first
-        console.log('🔄 Attempting Cashfree SDK payment...');
-        result = await processCashfreePayment(formData);
-      } catch (sdkError) {
-        console.warn('Cashfree SDK failed, trying simplified payment:', sdkError);
-
-        try {
-          // Fallback to simplified Cashfree payment
-          result = await processSimpleCashfreePayment(formData);
-        } catch (simpleError) {
-          console.warn('Simplified payment failed, trying direct payment:', simpleError);
-
-          // Final fallback to direct payment method
-          result = await processDirectPayment(formData);
-        }
+      // Validate payment configuration first
+      const validation = validatePaymentConfig();
+      if (!validation.valid) {
+        throw new Error(`Payment not configured: ${validation.issues.join(', ')}`);
       }
 
-      if (result.success) {
-        // Verify payment based on method used
-        if (result.method === 'simple_cashfree') {
-          await verifySimplePayment(result);
-        } else {
-          await verifyPayment(result);
-        }
+      console.log('💳 Processing REAL Cashfree payment - NO SIMULATION');
 
-        // Payment successful
+      // Ask user to choose payment method
+      const usePopup = confirm(
+        'Choose payment method:\n\n' +
+        'OK = Open payment in new window (recommended)\n' +
+        'Cancel = Redirect to payment page'
+      );
+
+      if (usePopup) {
+        // Open payment in new window
+        const result = await openPaymentInNewWindow(formData);
         handlePaymentSuccess(result);
       } else {
-        throw new Error('Payment was not completed');
+        // Redirect to payment page
+        await processRealCashfreePayment(formData);
+        // This will redirect, so code below won't execute
       }
 
     } catch (error) {
-      console.error('Payment error:', error);
+      console.error('❌ Real payment error:', error);
       handlePaymentError(error);
     } finally {
       setIsProcessing(false);
