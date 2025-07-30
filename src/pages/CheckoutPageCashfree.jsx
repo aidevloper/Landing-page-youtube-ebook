@@ -4,6 +4,7 @@ import Header from '../components/ui/Header';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Icon from '../components/AppIcon';
+import CashfreeConfigTest from '../components/CashfreeConfigTest';
 import { CASHFREE_CONFIG, PRODUCT_CONFIG, validateCashfreeConfig, getEnvironmentInfo } from '../config/cashfree';
 import { processRealCashfreePayment, openPaymentInNewWindow, validatePaymentConfig } from '../services/realCashfreeService';
 
