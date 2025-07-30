@@ -5,8 +5,7 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Icon from '../components/AppIcon';
 import { CASHFREE_CONFIG, PRODUCT_CONFIG, validateCashfreeConfig, getEnvironmentInfo } from '../config/cashfree';
-import { processCashfreePayment, processDirectPayment, verifyPayment } from '../services/cashfreeService';
-import { processSimpleCashfreePayment, verifySimplePayment } from '../services/simpleCashfreeService';
+import { processRealCashfreePayment, openPaymentInNewWindow, validatePaymentConfig } from '../services/realCashfreeService';
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -28,7 +27,7 @@ const CheckoutPage = () => {
   useEffect(() => {
     // Log environment info for debugging
     const envInfo = getEnvironmentInfo();
-    console.log('���� Cashfree Environment:', envInfo);
+    console.log('🔧 Cashfree Environment:', envInfo);
     
     // Validate configuration
     validateCashfreeConfig();
