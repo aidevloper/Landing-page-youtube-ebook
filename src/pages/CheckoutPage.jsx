@@ -23,13 +23,20 @@ const CheckoutPage = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderCreated, setOrderCreated] = useState(false);
 
-  // Load Razorpay script
+  // Load Razorpay script and validate configuration
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
     document.body.appendChild(script);
-    
+
+    // Log environment info for debugging
+    const envInfo = getEnvironmentInfo();
+    console.log('🔧 Razorpay Environment:', envInfo);
+
+    // Validate configuration
+    validateRazorpayConfig();
+
     return () => {
       document.body.removeChild(script);
     };
