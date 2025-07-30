@@ -289,6 +289,7 @@ const FinalCTA = () => {
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xl px-10 py-4"
                 iconName="ArrowRight"
                 iconPosition="right"
+                onClick={() => navigate('/checkout')}
               >
                 Yes, I Want My YouTube Empire
               </Button>
