@@ -69,20 +69,29 @@ const CheckoutPage = () => {
   const handleCashfreePayment = async () => {
     try {
       setIsProcessing(true);
-      
-      // Process payment with Cashfree
-      const result = await processCashfreePayment(formData);
-      
+
+      let result;
+
+      try {
+        // Try Cashfree SDK first
+        result = await processCashfreePayment(formData);
+      } catch (sdkError) {
+        console.warn('Cashfree SDK failed, trying direct payment:', sdkError);
+
+        // Fallback to direct payment method
+        result = await processDirectPayment(formData);
+      }
+
       if (result.success) {
         // Verify payment
         await verifyPayment(result);
-        
+
         // Payment successful
         handlePaymentSuccess(result);
       } else {
         throw new Error('Payment was not completed');
       }
-      
+
     } catch (error) {
       console.error('Payment error:', error);
       handlePaymentError(error);
