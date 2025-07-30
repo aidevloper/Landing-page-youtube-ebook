@@ -128,13 +128,26 @@ const CheckoutPage = () => {
   const handlePaymentCancelled = (paymentData) => {
     console.log('❌ Payment cancelled by user:', paymentData);
 
-    // Show cancellation message
-    const message = `❌ Payment Cancelled\n\nOrder ID: ${paymentData.orderId}\n\nNo money was charged. You can try again or contact support if you need help.`;
+    // Show cancellation message with retry option
+    const retry = confirm(
+      `❌ Payment Cancelled\n\n` +
+      `Order ID: ${paymentData.orderId}\n` +
+      `No money was charged.\n\n` +
+      `Would you like to try the payment again?\n\n` +
+      `✅ Click OK to retry payment\n` +
+      `❌ Click Cancel to stay on this page`
+    );
 
-    alert(message);
-
-    // Don't redirect, let user try again
-    // Could also show a retry dialog here
+    if (retry) {
+      // Reset processing state and let user try again
+      console.log('🔄 User chose to retry payment');
+      setIsProcessing(false);
+      // Could automatically trigger payment again or just reset the form
+    } else {
+      console.log('ℹ️ User chose not to retry payment');
+      // Just reset the processing state
+      setIsProcessing(false);
+    }
   };
 
   const handlePaymentError = (error) => {
