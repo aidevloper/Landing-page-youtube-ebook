@@ -133,9 +133,7 @@ const CheckoutPage = () => {
         notes: {
           address: `${formData.address}, ${formData.city}, ${formData.zipCode}`
         },
-        theme: {
-          color: '#10b981' // Emerald green to match your theme
-        },
+        theme: RAZORPAY_CONFIG.theme,
         modal: {
           ondismiss: function() {
             setIsProcessing(false);
