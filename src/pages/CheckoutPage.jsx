@@ -113,12 +113,12 @@ const CheckoutPage = () => {
       setOrderCreated(true);
 
       const options = {
-        key: 'rzp_test_9999999999', // Replace with your Razorpay key ID
+        key: RAZORPAY_CONFIG.key_id,
         amount: order.amount,
         currency: order.currency,
-        name: 'YouTube Automation Ebook',
-        description: 'AI-Powered YouTube Automation System',
-        image: '/favicon.ico',
+        name: RAZORPAY_CONFIG.name,
+        description: RAZORPAY_CONFIG.description,
+        image: RAZORPAY_CONFIG.image,
         order_id: order.id,
         handler: function (response) {
           // Payment successful
