@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
 
 const IncomeCalculator = () => {
+  const navigate = useNavigate();
   const [desiredIncome, setDesiredIncome] = useState(300000);
   const [selectedNiche, setSelectedNiche] = useState('finance');
   const [calculations, setCalculations] = useState({});
@@ -320,6 +322,7 @@ const IncomeCalculator = () => {
                       className="bg-accent hover:bg-accent/90 text-accent-foreground"
                       iconName="ArrowRight"
                       iconPosition="right"
+                      onClick={() => navigate('/checkout')}
                     >
                       Start Your Journey - ₹999
                     </Button>
