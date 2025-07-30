@@ -138,8 +138,20 @@ const CheckoutPage = () => {
   };
 
   const handlePaymentError = (error) => {
-    console.error('Payment failed:', error);
-    alert(`Payment failed: ${error.message || 'Something went wrong'}`);
+    console.error('❌ Payment error:', error);
+
+    let message;
+    if (error.message?.includes('not configured')) {
+      message = `❌ Configuration Error\n\n${error.message}\n\nPlease contact support to resolve this issue.`;
+    } else if (error.message?.includes('popup was blocked')) {
+      message = `❌ Popup Blocked\n\nYour browser blocked the payment popup.\n\nPlease allow popups for this site and try again.`;
+    } else if (error.message?.includes('timeout')) {
+      message = `❌ Payment Timeout\n\nThe payment process took too long.\n\nPlease try again or contact support.`;
+    } else {
+      message = `❌ Payment Error\n\n${error.message || 'Something went wrong'}\n\nPlease try again or contact support.`;
+    }
+
+    alert(message);
   };
 
   const handleSubmit = async (e) => {
