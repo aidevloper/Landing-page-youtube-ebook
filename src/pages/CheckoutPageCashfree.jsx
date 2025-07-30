@@ -104,19 +104,18 @@ const CheckoutPage = () => {
   };
 
   const handlePaymentSuccess = (paymentData) => {
-    console.log('Payment successful:', paymentData);
+    console.log('✅ REAL Payment successful:', paymentData);
 
-    // Show success message with method info
-    const method = paymentData.method || 'cashfree';
-    const message = method === 'demo'
-      ? `Demo payment successful! Order ID: ${paymentData.orderId}`
-      : `Payment successful! Order ID: ${paymentData.orderId}`;
+    // Show success message for real payment
+    const message = paymentData.userConfirmed
+      ? `Payment completed! Order ID: ${paymentData.orderId}\n\nPlease check your Cashfree dashboard for transaction details.`
+      : `Real payment processed! Order ID: ${paymentData.orderId}`;
 
     alert(message);
 
     // Redirect to success page
     setTimeout(() => {
-      navigate('/success', { state: { paymentSuccess: true, paymentData } });
+      navigate('/success', { state: { paymentSuccess: true, paymentData, realPayment: true } });
     }, 2000);
   };
 
