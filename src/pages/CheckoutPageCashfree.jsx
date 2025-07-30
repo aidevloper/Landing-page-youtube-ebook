@@ -422,37 +422,21 @@ const CheckoutPage = () => {
                       ))}
                     </div>
 
-                    {/* Complete Purchase Buttons */}
-                    <div className="space-y-4">
-                      <Button
-                        type="submit"
-                        variant="default"
-                        size="xl"
-                        fullWidth
-                        loading={isProcessing}
-                        className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold text-xl py-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
-                        iconName={isProcessing ? null : "CreditCard"}
-                        iconPosition="left"
-                      >
-                        {isProcessing 
-                          ? 'Processing Payment...' 
-                          : `Pay ₹${productDetails.price.toLocaleString('en-IN')} Securely`}
-                      </Button>
-
-                      {/* Demo Payment Button */}
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="xl"
-                        fullWidth
-                        onClick={handleDemoPayment}
-                        className="border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 font-semibold py-6 rounded-xl transition-all duration-200"
-                        iconName="Play"
-                        iconPosition="left"
-                      >
-                        Try Demo Payment (Testing)
-                      </Button>
-                    </div>
+                    {/* Complete Purchase Button */}
+                    <Button
+                      type="submit"
+                      variant="default"
+                      size="xl"
+                      fullWidth
+                      loading={isProcessing}
+                      className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold text-xl py-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                      iconName={isProcessing ? null : "CreditCard"}
+                      iconPosition="left"
+                    >
+                      {isProcessing
+                        ? 'Processing Payment...'
+                        : `Pay ₹${productDetails.price.toLocaleString('en-IN')} Securely`}
+                    </Button>
 
                     <div className="text-center mt-4 text-sm text-text-secondary">
                       By completing your purchase, you agree to our Terms of Service and Privacy Policy
