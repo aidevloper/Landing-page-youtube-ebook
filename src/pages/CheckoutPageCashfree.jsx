@@ -102,10 +102,15 @@ const CheckoutPage = () => {
 
   const handlePaymentSuccess = (paymentData) => {
     console.log('Payment successful:', paymentData);
-    
-    // Show success message
-    alert(`Payment successful! Order ID: ${paymentData.orderId}`);
-    
+
+    // Show success message with method info
+    const method = paymentData.method || 'cashfree';
+    const message = method === 'demo'
+      ? `Demo payment successful! Order ID: ${paymentData.orderId}`
+      : `Payment successful! Order ID: ${paymentData.orderId}`;
+
+    alert(message);
+
     // Redirect to success page
     setTimeout(() => {
       navigate('/success', { state: { paymentSuccess: true, paymentData } });
