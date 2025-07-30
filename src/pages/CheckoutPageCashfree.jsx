@@ -89,7 +89,12 @@ const CheckoutPage = () => {
       if (usePopup) {
         // Open payment in new window
         const result = await openPaymentInNewWindow(formData);
-        handlePaymentSuccess(result);
+
+        if (result.success) {
+          handlePaymentSuccess(result);
+        } else {
+          handlePaymentCancelled(result);
+        }
       } else {
         // Redirect to payment page
         await processRealCashfreePayment(formData);
