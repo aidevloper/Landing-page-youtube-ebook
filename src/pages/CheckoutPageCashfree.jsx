@@ -114,8 +114,8 @@ const CheckoutPage = () => {
 
     // Show success message for real payment
     const message = paymentData.userConfirmed
-      ? `Payment completed! Order ID: ${paymentData.orderId}\n\nPlease check your Cashfree dashboard for transaction details.`
-      : `Real payment processed! Order ID: ${paymentData.orderId}`;
+      ? `✅ Payment Completed Successfully!\n\nOrder ID: ${paymentData.orderId}\n\nPlease check your Cashfree dashboard for transaction details.`
+      : `✅ Real payment processed! Order ID: ${paymentData.orderId}`;
 
     alert(message);
 
@@ -123,6 +123,18 @@ const CheckoutPage = () => {
     setTimeout(() => {
       navigate('/success', { state: { paymentSuccess: true, paymentData, realPayment: true } });
     }, 2000);
+  };
+
+  const handlePaymentCancelled = (paymentData) => {
+    console.log('❌ Payment cancelled by user:', paymentData);
+
+    // Show cancellation message
+    const message = `❌ Payment Cancelled\n\nOrder ID: ${paymentData.orderId}\n\nNo money was charged. You can try again or contact support if you need help.`;
+
+    alert(message);
+
+    // Don't redirect, let user try again
+    // Could also show a retry dialog here
   };
 
   const handlePaymentError = (error) => {
