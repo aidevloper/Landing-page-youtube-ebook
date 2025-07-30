@@ -29,7 +29,7 @@ const CheckoutPage = () => {
   useEffect(() => {
     // Log environment info for debugging
     const envInfo = getEnvironmentInfo();
-    console.log('🔧 Cashfree Environment:', envInfo);
+    console.log('���� Cashfree Environment:', envInfo);
     
     // Validate configuration
     validateCashfreeConfig();
@@ -156,6 +156,7 @@ const CheckoutPage = () => {
 
   const handlePaymentError = (error) => {
     console.error('❌ Payment error:', error);
+    setPaymentStatus('error');
 
     let message;
     if (error.message?.includes('not configured')) {
@@ -169,6 +170,11 @@ const CheckoutPage = () => {
     }
 
     alert(message);
+
+    // Reset processing state after error
+    setTimeout(() => {
+      setIsProcessing(false);
+    }, 1000);
   };
 
   const handleSubmit = async (e) => {
