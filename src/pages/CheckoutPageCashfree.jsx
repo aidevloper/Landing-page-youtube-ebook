@@ -408,13 +408,13 @@ const CheckoutPage = () => {
                       size="xl"
                       fullWidth
                       loading={isProcessing}
-                      className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold text-xl py-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+                      className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-xl py-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
                       iconName={isProcessing ? null : "CreditCard"}
                       iconPosition="left"
                     >
                       {isProcessing
-                        ? 'Processing Payment...'
-                        : `Pay ₹${productDetails.price.toLocaleString('en-IN')} Securely`}
+                        ? 'Opening Real Payment Gateway...'
+                        : `🔴 REAL PAYMENT - ₹${productDetails.price.toLocaleString('en-IN')}`}
                     </Button>
 
                     <div className="text-center mt-4 text-sm text-text-secondary">
