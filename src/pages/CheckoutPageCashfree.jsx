@@ -159,45 +159,42 @@ const CheckoutPage = () => {
 
   // Configuration status component
   const CashfreeStatus = () => {
-    const isConfigured = validateCashfreeConfig();
+    const validation = validatePaymentConfig();
     const envInfo = getEnvironmentInfo();
 
     return (
       <div className={`rounded-xl p-4 mb-6 ${
-        isConfigured
-          ? 'bg-green-50 border border-green-200'
+        validation.valid
+          ? 'bg-red-50 border border-red-200'
           : 'bg-yellow-50 border border-yellow-200'
       }`}>
         <div className="flex items-start space-x-3">
           <Icon
-            name={isConfigured ? "CheckCircle" : "AlertTriangle"}
+            name={validation.valid ? "AlertCircle" : "AlertTriangle"}
             size={20}
-            className={`mt-0.5 ${isConfigured ? 'text-green-600' : 'text-yellow-600'}`}
+            className={`mt-0.5 ${validation.valid ? 'text-red-600' : 'text-yellow-600'}`}
           />
           <div className="text-sm">
             <div className={`font-semibold mb-1 ${
-              isConfigured ? 'text-green-800' : 'text-yellow-800'
+              validation.valid ? 'text-red-800' : 'text-yellow-800'
             }`}>
-              {isConfigured
-                ? `✅ Cashfree ${envInfo.environment} Mode Active`
-                : '⚙️ Demo Mode - Cashfree Not Configured'
+              {validation.valid
+                ? `🔴 LIVE PAYMENTS ONLY - ${envInfo.environment}`
+                : '⚠️ Payment Configuration Issues'
               }
             </div>
-            <div className={isConfigured ? 'text-green-700' : 'text-yellow-700'}>
-              {isConfigured ? (
+            <div className={validation.valid ? 'text-red-700' : 'text-yellow-700'}>
+              {validation.valid ? (
                 <>
-                  App ID: {envInfo.appId} | Environment: {envInfo.environment}
+                  App ID: {envInfo.appId} | Real transactions will be processed
                   <br />
-                  <span className="text-xs font-semibold">🔴 REAL PAYMENTS ACTIVE - Customers will be charged actual money</span>
+                  <span className="text-xs font-bold">⚠️ NO SIMULATION - Real money will be charged!</span>
                 </>
               ) : (
                 <>
-                  You're using demo mode. To enable real payments:
-                  <ol className="list-decimal list-inside mt-2 space-y-1 text-xs">
-                    <li>Get your Cashfree App ID from dashboard</li>
-                    <li>Set environment variable: VITE_CASHFREE_APP_ID</li>
-                    <li>Restart the development server</li>
-                  </ol>
+                  Issues found: {validation.issues.join(', ')}
+                  <br />
+                  <span className="text-xs">Please fix these issues to enable payments</span>
                 </>
               )}
             </div>
