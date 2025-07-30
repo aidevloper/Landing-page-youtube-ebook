@@ -5,11 +5,22 @@ import { CASHFREE_CONFIG, PRODUCT_CONFIG, generateOrderId } from '../config/cash
 export const processRealCashfreePayment = async (formData) => {
   try {
     console.log('💳 Processing REAL Cashfree payment for:', formData.email);
-    
+
+    // Debug environment variables
+    console.log('🔧 Environment Debug:');
+    console.log('App ID from env:', import.meta.env.VITE_CASHFREE_APP_ID);
+    console.log('Mode from env:', import.meta.env.VITE_CASHFREE_MODE);
+    console.log('Config App ID:', CASHFREE_CONFIG.app_id);
+    console.log('Config Environment:', CASHFREE_CONFIG.environment);
+
     // Validate Cashfree configuration
     if (!CASHFREE_CONFIG.app_id || CASHFREE_CONFIG.app_id === 'TEST_APP_ID') {
+      console.error('❌ Cashfree App ID validation failed');
+      console.error('Current App ID:', CASHFREE_CONFIG.app_id);
       throw new Error('Cashfree App ID not configured. Cannot process real payments.');
     }
+
+    console.log('✅ Cashfree configuration validated successfully');
     
     // Prepare order data
     const orderId = generateOrderId();
