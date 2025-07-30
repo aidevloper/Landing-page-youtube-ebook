@@ -23,6 +23,7 @@ const CheckoutPage = () => {
 
   const [paymentMethod, setPaymentMethod] = useState('cashfree');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState(null); // 'success', 'cancelled', 'error'
 
   // Initialize Cashfree and validate configuration
   useEffect(() => {
