@@ -213,24 +213,38 @@ export const openPaymentInNewWindow = async (formData) => {
 
 // Validate payment configuration
 export const validatePaymentConfig = () => {
+  console.log('🔍 Validating payment configuration...');
+  console.log('Raw env VITE_CASHFREE_APP_ID:', import.meta.env.VITE_CASHFREE_APP_ID);
+  console.log('Config app_id:', CASHFREE_CONFIG.app_id);
+  console.log('Config environment:', CASHFREE_CONFIG.environment);
+  console.log('Product price:', PRODUCT_CONFIG.price);
+
   const issues = [];
-  
+
   if (!CASHFREE_CONFIG.app_id || CASHFREE_CONFIG.app_id === 'TEST_APP_ID') {
-    issues.push('Cashfree App ID not configured');
+    issues.push(`Cashfree App ID not configured (current: ${CASHFREE_CONFIG.app_id})`);
   }
-  
+
   if (!CASHFREE_CONFIG.environment) {
     issues.push('Cashfree environment not set');
   }
-  
+
   if (!PRODUCT_CONFIG.price || PRODUCT_CONFIG.price <= 0) {
     issues.push('Product price not configured');
   }
-  
-  return {
+
+  const result = {
     valid: issues.length === 0,
-    issues: issues
+    issues: issues,
+    config: {
+      app_id: CASHFREE_CONFIG.app_id,
+      environment: CASHFREE_CONFIG.environment,
+      price: PRODUCT_CONFIG.price
+    }
   };
+
+  console.log('Validation result:', result);
+  return result;
 };
 
 // Get real payment info
