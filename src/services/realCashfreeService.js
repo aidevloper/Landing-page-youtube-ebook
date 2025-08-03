@@ -305,21 +305,23 @@ export const openPaymentInNewWindow = async (formData) => {
   try {
     const orderId = generateOrderId();
 
-    console.log('🪟 Opening payment in new window...');
+    console.log('🪟 Opening payment confirmation in new window...');
 
-    // Create payment URL for new window
-    const paymentUrl = createPaymentURLForWindow(orderId, formData);
-
-    // Open in new window
+    // Create a simple about:blank window and write content directly
     const paymentWindow = window.open(
-      paymentUrl,
+      'about:blank',
       'cashfree_payment',
-      'width=900,height=700,scrollbars=yes,resizable=yes,toolbar=no,location=yes'
+      'width=600,height=800,scrollbars=yes,resizable=yes,toolbar=no,location=no'
     );
 
     if (!paymentWindow) {
       throw new Error('Payment popup was blocked. Please allow popups and try again.');
     }
+
+    // Write HTML content directly to the new window
+    const htmlContent = createPaymentWindowContent(orderId, formData);
+    paymentWindow.document.write(htmlContent);
+    paymentWindow.document.close();
     
     // Monitor payment window
     return new Promise((resolve, reject) => {
