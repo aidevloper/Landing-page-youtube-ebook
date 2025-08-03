@@ -88,45 +88,21 @@ const CheckoutPage = () => {
         );
 
         if (usePopup) {
-          // Open in new window
-          const paymentWindow = window.open(
-            'https://payments.cashfree.com/forms/YOUTUBE_EBOOK',
-            'cashfree_payment',
-            'width=500,height=700,scrollbars=yes,resizable=yes'
-          );
-
-          if (!paymentWindow) {
-            throw new Error('Popup blocked. Please allow popups for this site.');
+          // Open payment in new window using our service
+          const result = await openPaymentInNewWindow(formData);
+          if (result.success) {
+            handlePaymentSuccess(result);
+          } else {
+            handlePaymentCancelled(result);
           }
-
-          // Monitor the popup window
-          const checkInterval = setInterval(() => {
-            try {
-              if (paymentWindow.closed) {
-                clearInterval(checkInterval);
-                handlePaymentSuccess({
-                  success: true,
-                  orderId: `order_${Date.now()}`,
-                  method: 'cashfree_form_popup',
-                  status: 'window_closed'
-                });
-              }
-            } catch (error) {
-              console.log('Cross-origin check, continuing...');
-            }
-          }, 1000);
-
-          // Timeout after 15 minutes
-          setTimeout(() => {
-            clearInterval(checkInterval);
-            if (!paymentWindow.closed) {
-              paymentWindow.close();
-            }
-          }, 900000);
-
         } else {
-          // Redirect to payment form
-          window.location.href = 'https://payments.cashfree.com/forms/YOUTUBE_EBOOK';
+          // Process payment using our service
+          const result = await processRealCashfreePayment(formData);
+          if (result.success) {
+            handlePaymentSuccess(result);
+          } else {
+            handlePaymentError(new Error('Payment failed'));
+          }
         }
       } else {
         // Use demo mode for testing

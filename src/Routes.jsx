@@ -16,6 +16,7 @@ const Routes = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/landing-page" element={<LandingPage />} />
           <Route path="/checkout" element={<CheckoutPageCashfree />} />
+          <Route path="/success" element={<PaymentSuccessPage />} />
           <Route path="/payment-success" element={<PaymentSuccessPage />} />
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
