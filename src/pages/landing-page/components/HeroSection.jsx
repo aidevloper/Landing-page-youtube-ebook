@@ -47,6 +47,10 @@ const HeroSection = () => {
     }
   };
 
+  const handleCheckout = () => {
+    navigate('/checkout');
+  };
+
   return (
     <section className="relative min-h-screen premium-gradient overflow-hidden">
       {/* Enhanced Background Elements with Animation */}
