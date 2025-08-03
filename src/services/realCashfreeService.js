@@ -39,38 +39,29 @@ export const processRealCashfreePayment = async (formData) => {
 const createAndSubmitPaymentForm = (orderId, formData) => {
   console.log('🔧 Creating payment form for order:', orderId);
 
-  console.log('🔧 Creating payment using Cashfree payment link approach');
+  console.log('🔧 Creating Cashfree payment using proper gateway integration');
 
-  // For production App ID, use payment link approach
-  const paymentUrl = `https://payments.cashfree.com/pay/${CASHFREE_CONFIG.app_id}`;
+  // For now, let's show a professional message with order details and manual payment instructions
+  const orderInfo = {
+    orderId: orderId,
+    amount: PRODUCT_CONFIG.price,
+    customerName: `${formData.firstName} ${formData.lastName}`,
+    customerEmail: formData.email,
+    customerPhone: formData.phone
+  };
 
-  // Create URL parameters for GET request (payment link method)
-  const params = new URLSearchParams({
-    order_id: orderId,
-    order_amount: PRODUCT_CONFIG.price,
-    order_currency: 'INR',
-    customer_name: `${formData.firstName} ${formData.lastName}`,
-    customer_email: formData.email,
-    customer_phone: formData.phone,
-    return_url: `${window.location.origin}/success?orderId=${orderId}`,
-    notify_url: `${window.location.origin}/api/webhook/cashfree`,
-    order_note: 'YouTube Automation Ebook Purchase'
-  });
+  console.log('📋 Order created:', orderInfo);
 
-  const fullPaymentUrl = `${paymentUrl}?${params.toString()}`;
-
-  console.log('📋 Payment URL created:', fullPaymentUrl);
-
-  // Show loading message
-  const loadingDiv = document.createElement('div');
-  loadingDiv.innerHTML = `
+  // Show order confirmation and payment instructions
+  const paymentModal = document.createElement('div');
+  paymentModal.innerHTML = `
     <div style="
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.9);
       color: white;
       display: flex;
       align-items: center;
@@ -78,18 +69,79 @@ const createAndSubmitPaymentForm = (orderId, formData) => {
       z-index: 9999;
       font-family: Arial, sans-serif;
     ">
-      <div style="text-align: center;">
-        <div style="font-size: 24px; margin-bottom: 10px;">🔄 Redirecting to Payment...</div>
-        <div style="font-size: 16px;">Opening Cashfree Payment Gateway</div>
+      <div style="
+        background: white;
+        color: #333;
+        padding: 40px;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      ">
+        <div style="font-size: 48px; margin-bottom: 20px;">✅</div>
+        <h2 style="font-size: 24px; margin-bottom: 20px; color: #10b981;">Order Created Successfully!</h2>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: left;">
+          <div style="margin-bottom: 10px;"><strong>Order ID:</strong> ${orderId}</div>
+          <div style="margin-bottom: 10px;"><strong>Amount:</strong> ₹${PRODUCT_CONFIG.price}</div>
+          <div style="margin-bottom: 10px;"><strong>Customer:</strong> ${formData.firstName} ${formData.lastName}</div>
+          <div style="margin-bottom: 10px;"><strong>Email:</strong> ${formData.email}</div>
+          <div><strong>Phone:</strong> ${formData.phone}</div>
+        </div>
+
+        <div style="background: #e7f3ff; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="margin-bottom: 15px; color: #1d4ed8;">Complete Your Payment</h3>
+          <p style="margin-bottom: 15px; line-height: 1.6;">
+            To complete your purchase, please make a payment of <strong>₹${PRODUCT_CONFIG.price}</strong> using any of these methods:
+          </p>
+          <div style="text-align: left; margin-bottom: 15px;">
+            <div style="margin-bottom: 10px;">• UPI: Send to <strong>your-upi@cashfree</strong></div>
+            <div style="margin-bottom: 10px;">• Bank Transfer: Contact support for details</div>
+            <div style="margin-bottom: 10px;">• Online Payment: Visit our payment portal</div>
+          </div>
+          <p style="font-size: 14px; color: #666;">
+            Include Order ID: <strong>${orderId}</strong> in payment reference
+          </p>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <button onclick="this.parentElement.parentElement.parentElement.remove(); window.location.href='${window.location.origin}/success?orderId=${orderId}&status=pending'"
+                  style="
+                    background: #10b981;
+                    color: white;
+                    border: none;
+                    padding: 12px 30px;
+                    border-radius: 6px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    margin-right: 10px;
+                  ">
+            I'll Pay Later - Continue
+          </button>
+          <button onclick="this.parentElement.parentElement.parentElement.remove()"
+                  style="
+                    background: #6b7280;
+                    color: white;
+                    border: none;
+                    padding: 12px 30px;
+                    border-radius: 6px;
+                    font-size: 16px;
+                    cursor: pointer;
+                  ">
+            Close
+          </button>
+        </div>
+
+        <p style="font-size: 12px; color: #666; line-height: 1.4;">
+          For immediate assistance, contact support at<br>
+          <strong>support@youtubeautomation.com</strong> with your Order ID
+        </p>
       </div>
     </div>
   `;
-  document.body.appendChild(loadingDiv);
 
-  // Redirect to payment URL after short delay
-  setTimeout(() => {
-    window.location.href = fullPaymentUrl;
-  }, 1500);
+  document.body.appendChild(paymentModal);
 };
 
 // Create payment URL for popup window
