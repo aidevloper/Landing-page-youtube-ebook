@@ -92,80 +92,30 @@ const createAndSubmitPaymentForm = (orderId, formData) => {
   }, 1500);
 };
 
-// Create payment form for popup window
+// Create payment URL for popup window
 const createPaymentURLForWindow = (orderId, formData) => {
-  console.log('🔧 Creating payment form for popup window:', orderId);
+  console.log('🔧 Creating payment URL for popup window:', orderId);
 
-  // For popup, we need to create a temporary page with a form that auto-submits
-  const paymentData = {
-    appId: CASHFREE_CONFIG.app_id,
-    orderId: orderId,
-    orderAmount: PRODUCT_CONFIG.price,
-    orderCurrency: 'INR',
-    orderNote: 'YouTube Automation Ebook Purchase',
-    customerName: `${formData.firstName} ${formData.lastName}`,
-    customerEmail: formData.email,
-    customerPhone: formData.phone,
-    returnUrl: `${window.location.origin}/success?orderId=${orderId}`,
-    notifyUrl: `${window.location.origin}/api/webhook/cashfree`,
-    paymentModes: 'cc,dc,nb,upi,wallet'
-  };
+  // Use payment link approach for popup as well
+  const paymentUrl = `https://payments.cashfree.com/pay/${CASHFREE_CONFIG.app_id}`;
 
-  // Create a data URL with HTML form that auto-submits
-  const formFields = Object.entries(paymentData)
-    .map(([key, value]) => `<input type="hidden" name="${key}" value="${value}">`)
-    .join('');
+  // Create URL parameters
+  const params = new URLSearchParams({
+    order_id: orderId,
+    order_amount: PRODUCT_CONFIG.price,
+    order_currency: 'INR',
+    customer_name: `${formData.firstName} ${formData.lastName}`,
+    customer_email: formData.email,
+    customer_phone: formData.phone,
+    return_url: `${window.location.origin}/success?orderId=${orderId}`,
+    notify_url: `${window.location.origin}/api/webhook/cashfree`,
+    order_note: 'YouTube Automation Ebook Purchase'
+  });
 
-  const htmlContent = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Redirecting to Payment Gateway...</title>
-      <style>
-        body {
-          font-family: Arial, sans-serif;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          margin: 0;
-          background: #f0f0f0;
-        }
-        .loading { text-align: center; }
-        .spinner {
-          border: 4px solid #f3f3f3;
-          border-top: 4px solid #3498db;
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-          animation: spin 1s linear infinite;
-          margin: 0 auto 20px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-      </style>
-    </head>
-    <body>
-      <div class="loading">
-        <div class="spinner"></div>
-        <h3>Redirecting to Cashfree Payment Gateway...</h3>
-        <p>Please wait while we process your request.</p>
-      </div>
-      <form id="paymentForm" method="POST" action="https://payments.cashfree.com/forms/checkout">
-        ${formFields}
-      </form>
-      <script>
-        setTimeout(function() {
-          document.getElementById('paymentForm').submit();
-        }, 2000);
-      </script>
-    </body>
-    </html>
-  `;
+  const fullPaymentUrl = `${paymentUrl}?${params.toString()}`;
 
-  const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlContent);
-
-  console.log('📋 Payment form created for popup');
-  return dataUrl;
+  console.log('📋 Payment URL for popup created:', fullPaymentUrl);
+  return fullPaymentUrl;
 };
 
 // Redirect to real payment page
