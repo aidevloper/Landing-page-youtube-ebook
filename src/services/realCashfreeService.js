@@ -144,30 +144,124 @@ const createAndSubmitPaymentForm = (orderId, formData) => {
   document.body.appendChild(paymentModal);
 };
 
-// Create payment URL for popup window
+// Create payment instructions page for popup window
 const createPaymentURLForWindow = (orderId, formData) => {
-  console.log('🔧 Creating payment URL for popup window:', orderId);
+  console.log('🔧 Creating payment instructions for popup window:', orderId);
 
-  // Use payment link approach for popup as well
-  const paymentUrl = `https://payments.cashfree.com/pay/${CASHFREE_CONFIG.app_id}`;
+  // Create a data URL with order confirmation and payment instructions
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Order Confirmation - YouTube Automation Ebook</title>
+      <meta charset="UTF-8">
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 20px;
+          background: #f8f9fa;
+          line-height: 1.6;
+        }
+        .container {
+          max-width: 500px;
+          margin: 0 auto;
+          background: white;
+          padding: 30px;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .success-icon {
+          font-size: 48px;
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        .title {
+          font-size: 24px;
+          font-weight: bold;
+          color: #10b981;
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        .order-details {
+          background: #f8f9fa;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 20px;
+        }
+        .payment-info {
+          background: #e7f3ff;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 20px;
+        }
+        .btn {
+          background: #10b981;
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 6px;
+          font-size: 16px;
+          cursor: pointer;
+          width: 100%;
+          margin-bottom: 10px;
+        }
+        .btn:hover { background: #059669; }
+        .contact {
+          font-size: 12px;
+          color: #666;
+          text-align: center;
+          margin-top: 20px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="success-icon">✅</div>
+        <div class="title">Order Created Successfully!</div>
 
-  // Create URL parameters
-  const params = new URLSearchParams({
-    order_id: orderId,
-    order_amount: PRODUCT_CONFIG.price,
-    order_currency: 'INR',
-    customer_name: `${formData.firstName} ${formData.lastName}`,
-    customer_email: formData.email,
-    customer_phone: formData.phone,
-    return_url: `${window.location.origin}/success?orderId=${orderId}`,
-    notify_url: `${window.location.origin}/api/webhook/cashfree`,
-    order_note: 'YouTube Automation Ebook Purchase'
-  });
+        <div class="order-details">
+          <h3>Order Details</h3>
+          <div><strong>Order ID:</strong> ${orderId}</div>
+          <div><strong>Amount:</strong> ₹${PRODUCT_CONFIG.price}</div>
+          <div><strong>Product:</strong> AI YouTube Automation Ebook</div>
+          <div><strong>Customer:</strong> ${formData.firstName} ${formData.lastName}</div>
+          <div><strong>Email:</strong> ${formData.email}</div>
+          <div><strong>Phone:</strong> ${formData.phone}</div>
+        </div>
 
-  const fullPaymentUrl = `${paymentUrl}?${params.toString()}`;
+        <div class="payment-info">
+          <h3>Complete Your Payment</h3>
+          <p>To complete your purchase, please make a payment of <strong>₹${PRODUCT_CONFIG.price}</strong> using any convenient method and share the payment screenshot with us.</p>
+          <div style="margin: 15px 0;">
+            <div>• UPI Payment</div>
+            <div>• Bank Transfer</div>
+            <div>• Online Payment</div>
+          </div>
+          <p><strong>Important:</strong> Include Order ID <strong>${orderId}</strong> in payment reference</p>
+        </div>
 
-  console.log('📋 Payment URL for popup created:', fullPaymentUrl);
-  return fullPaymentUrl;
+        <button class="btn" onclick="window.location.href='${window.location.origin}/success?orderId=${orderId}&status=pending'">
+          Continue to Success Page
+        </button>
+
+        <button class="btn" style="background: #6b7280;" onclick="window.close()">
+          Close Window
+        </button>
+
+        <div class="contact">
+          For immediate assistance, contact support at<br>
+          <strong>support@youtubeautomation.com</strong>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlContent);
+
+  console.log('📋 Payment instructions page created for popup');
+  return dataUrl;
 };
 
 // Redirect to real payment page
