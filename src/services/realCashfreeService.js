@@ -39,41 +39,27 @@ export const processRealCashfreePayment = async (formData) => {
 const createAndSubmitPaymentForm = (orderId, formData) => {
   console.log('🔧 Creating payment form for order:', orderId);
 
-  // Create a hidden form that submits to Cashfree
-  const form = document.createElement('form');
-  form.method = 'POST';
-  // Use correct Cashfree production endpoint
-  form.action = 'https://payments.cashfree.com/forms/checkout';
-  form.target = '_self';
+  console.log('🔧 Creating payment using Cashfree payment link approach');
 
-  // Payment parameters
-  const params = {
-    appId: CASHFREE_CONFIG.app_id,
-    orderId: orderId,
-    orderAmount: PRODUCT_CONFIG.price,
-    orderCurrency: 'INR',
-    orderNote: 'YouTube Automation Ebook Purchase',
-    customerName: `${formData.firstName} ${formData.lastName}`,
-    customerEmail: formData.email,
-    customerPhone: formData.phone,
-    returnUrl: `${window.location.origin}/success?orderId=${orderId}`,
-    notifyUrl: `${window.location.origin}/api/webhook/cashfree`,
-    paymentModes: 'cc,dc,nb,upi,wallet'
-  };
+  // For production App ID, use payment link approach
+  const paymentUrl = `https://payments.cashfree.com/pay/${CASHFREE_CONFIG.app_id}`;
 
-  // Create hidden input fields
-  Object.keys(params).forEach(key => {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = params[key];
-    form.appendChild(input);
+  // Create URL parameters for GET request (payment link method)
+  const params = new URLSearchParams({
+    order_id: orderId,
+    order_amount: PRODUCT_CONFIG.price,
+    order_currency: 'INR',
+    customer_name: `${formData.firstName} ${formData.lastName}`,
+    customer_email: formData.email,
+    customer_phone: formData.phone,
+    return_url: `${window.location.origin}/success?orderId=${orderId}`,
+    notify_url: `${window.location.origin}/api/webhook/cashfree`,
+    order_note: 'YouTube Automation Ebook Purchase'
   });
 
-  // Add form to document and submit
-  document.body.appendChild(form);
+  const fullPaymentUrl = `${paymentUrl}?${params.toString()}`;
 
-  console.log('📋 Submitting payment form with params:', params);
+  console.log('📋 Payment URL created:', fullPaymentUrl);
 
   // Show loading message
   const loadingDiv = document.createElement('div');
@@ -93,17 +79,17 @@ const createAndSubmitPaymentForm = (orderId, formData) => {
       font-family: Arial, sans-serif;
     ">
       <div style="text-align: center;">
-        <div style="font-size: 24px; margin-bottom: 10px;">🔄 Processing Payment...</div>
-        <div style="font-size: 16px;">Redirecting to Cashfree Payment Gateway</div>
+        <div style="font-size: 24px; margin-bottom: 10px;">🔄 Redirecting to Payment...</div>
+        <div style="font-size: 16px;">Opening Cashfree Payment Gateway</div>
       </div>
     </div>
   `;
   document.body.appendChild(loadingDiv);
 
-  // Submit form after short delay
+  // Redirect to payment URL after short delay
   setTimeout(() => {
-    form.submit();
-  }, 1000);
+    window.location.href = fullPaymentUrl;
+  }, 1500);
 };
 
 // Create payment form for popup window
