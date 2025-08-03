@@ -1,7 +1,7 @@
 // Real Cashfree Payment Service - No Simulation
 import { CASHFREE_CONFIG, PRODUCT_CONFIG, generateOrderId } from '../config/cashfree';
 
-// Process real Cashfree payment - no fallbacks or simulation
+// Process real Cashfree payment - direct form submission
 export const processRealCashfreePayment = async (formData) => {
   try {
     console.log('💳 Processing REAL Cashfree payment for:', formData.email);
@@ -16,35 +16,16 @@ export const processRealCashfreePayment = async (formData) => {
 
     // Prepare order data
     const orderId = generateOrderId();
-    const orderData = {
-      amount: PRODUCT_CONFIG.price,
-      currency: 'INR',
-      orderId: orderId,
-      customer_details: {
-        customer_id: `customer_${Date.now()}`,
-        customer_name: `${formData.firstName} ${formData.lastName}`,
-        customer_email: formData.email,
-        customer_phone: formData.phone
-      }
-    };
 
     console.log('🔄 Creating real payment for order:', orderId);
 
-    // Create proper payment session
-    const paymentSession = await createPaymentSession(orderData);
-
-    // Generate payment URL
-    const paymentUrl = createDirectPaymentURL(orderId, orderData);
-
-    console.log('🌐 Real payment URL:', paymentUrl);
-
-    // Redirect to real payment page
-    redirectToPayment(paymentUrl);
+    // Create and submit a form to Cashfree
+    createAndSubmitPaymentForm(orderId, formData);
 
     return {
       success: true,
       orderId: orderId,
-      method: 'real_cashfree_redirect',
+      method: 'real_cashfree_form',
       redirected: true
     };
 
