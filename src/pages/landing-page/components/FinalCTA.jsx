@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
 
 const FinalCTA = () => {
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
     hours: 23,
     minutes: 45,
     seconds: 30
   });
   const [isVisible, setIsVisible] = useState(false);
+
+  const handleCheckout = () => {
+    navigate('/checkout');
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -286,6 +292,7 @@ const FinalCTA = () => {
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xl px-10 py-4"
                 iconName="ArrowRight"
                 iconPosition="right"
+                onClick={handleCheckout}
               >
                 Yes, I Want My YouTube Empire
               </Button>

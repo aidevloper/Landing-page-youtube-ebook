@@ -3,6 +3,8 @@ import { BrowserRouter, Routes as RouterRoutes, Route } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 import ScrollToTop from './components/ScrollToTop';
 import LandingPage from './pages/landing-page';
+import CheckoutPageCashfree from './pages/CheckoutPageCashfree';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import NotFound from './pages/NotFound';
 
 const Routes = () => {
@@ -13,6 +15,8 @@ const Routes = () => {
         <RouterRoutes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/landing-page" element={<LandingPage />} />
+          <Route path="/checkout" element={<CheckoutPageCashfree />} />
+          <Route path="/payment-success" element={<PaymentSuccessPage />} />
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>

@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
 
 const PricingSection = () => {
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
     hours: 23,
     minutes: 45,
     seconds: 30
   });
   const [selectedPayment, setSelectedPayment] = useState('full');
+
+  const handleCheckout = () => {
+    navigate('/checkout');
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -258,6 +264,7 @@ const PricingSection = () => {
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xl px-12 py-4 mb-4"
                 iconName="CreditCard"
                 iconPosition="left"
+                onClick={handleCheckout}
               >
                 {selectedPayment === 'full' ?'Get Instant Access - ₹999' :'Start with ₹333 Today'
                 }

@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
 
 const AIShowcaseSection = () => {
+  const navigate = useNavigate();
   const [activeDemo, setActiveDemo] = useState('finance');
   const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleCheckout = () => {
+    navigate('/checkout');
+  };
 
   const niches = [
     {
@@ -327,6 +333,7 @@ const AIShowcaseSection = () => {
             className="bg-emerald-600 hover:bg-emerald-700 text-white text-lg px-8 py-4"
             iconName="ArrowRight"
             iconPosition="right"
+            onClick={handleCheckout}
           >
             Get AI Automation System - ₹999
           </Button>
