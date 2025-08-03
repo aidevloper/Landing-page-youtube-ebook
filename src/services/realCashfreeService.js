@@ -62,36 +62,26 @@ export const processRealCashfreePayment = async (formData) => {
 
 // Create real Cashfree payment URL with proper parameters
 const createRealPaymentURL = (orderId, orderData) => {
-  // Use Cashfree's current payment URL structure (API v4)
-  const baseUrl = CASHFREE_CONFIG.environment === 'PRODUCTION'
-    ? 'https://checkout.cashfree.com/pay'
-    : 'https://sandbox.cashfree.com/pay';
+  console.log('🔧 Creating payment URL for order:', orderId);
+  console.log('🔧 Environment:', CASHFREE_CONFIG.environment);
+  console.log('🔧 App ID:', CASHFREE_CONFIG.app_id);
 
-  // Required parameters for Cashfree payment (v4 format)
+  // Try the standard Cashfree payment URL first
+  const baseUrl = 'https://payments.cashfree.com/forms/' + CASHFREE_CONFIG.app_id;
+
+  // Create a simple redirect URL with minimal parameters
   const params = new URLSearchParams({
-    // Required Cashfree parameters
-    'cf-appid': CASHFREE_CONFIG.app_id,
-    'cf-orderid': orderId,
-    'cf-orderamount': PRODUCT_CONFIG.price.toString(),
-    'cf-ordercurrency': 'INR',
-    'cf-ordernote': 'YouTube Automation Ebook Purchase',
-
-    // Customer details
-    'cf-customername': orderData.customer_details.customer_name,
-    'cf-customeremail': orderData.customer_details.customer_email,
-    'cf-customerphone': orderData.customer_details.customer_phone,
-
-    // Return URLs
-    'cf-returnurl': `${window.location.origin}/success?orderId=${orderId}`,
-    'cf-notifyurl': `${window.location.origin}/api/webhook/cashfree`,
-
-    // Additional parameters
-    'cf-paymentmodes': 'cc,dc,nb,upi,wallet',
-    'cf-theme': 'light'
+    amount: PRODUCT_CONFIG.price.toString(),
+    currency: 'INR',
+    name: orderData.customer_details.customer_name,
+    email: orderData.customer_details.customer_email,
+    phone: orderData.customer_details.customer_phone,
+    purpose: 'YouTube Automation Ebook',
+    'redirect-url': `${window.location.origin}/success?orderId=${orderId}`
   });
 
   const fullUrl = `${baseUrl}?${params.toString()}`;
-  console.log('📋 Payment URL created with parameters:', Object.fromEntries(params));
+  console.log('📋 Payment URL created:', fullUrl);
 
   return fullUrl;
 };
