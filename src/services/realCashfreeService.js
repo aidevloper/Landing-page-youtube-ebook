@@ -144,12 +144,11 @@ const createAndSubmitPaymentForm = (orderId, formData) => {
   document.body.appendChild(paymentModal);
 };
 
-// Create payment instructions page for popup window
-const createPaymentURLForWindow = (orderId, formData) => {
-  console.log('🔧 Creating payment instructions for popup window:', orderId);
+// Create payment window HTML content
+const createPaymentWindowContent = (orderId, formData) => {
+  console.log('🔧 Creating payment window content for order:', orderId);
 
-  // Create a data URL with order confirmation and payment instructions
-  const htmlContent = `
+  return `
     <!DOCTYPE html>
     <html>
     <head>
@@ -207,6 +206,8 @@ const createPaymentURLForWindow = (orderId, formData) => {
           margin-bottom: 10px;
         }
         .btn:hover { background: #059669; }
+        .btn-secondary { background: #6b7280; }
+        .btn-secondary:hover { background: #4b5563; }
         .contact {
           font-size: 12px;
           color: #666;
@@ -241,11 +242,11 @@ const createPaymentURLForWindow = (orderId, formData) => {
           <p><strong>Important:</strong> Include Order ID <strong>${orderId}</strong> in payment reference</p>
         </div>
 
-        <button class="btn" onclick="window.location.href='${window.location.origin}/success?orderId=${orderId}&status=pending'">
+        <button class="btn" onclick="window.opener.location.href='${window.location.origin}/success?orderId=${orderId}&status=pending'; window.close();">
           Continue to Success Page
         </button>
 
-        <button class="btn" style="background: #6b7280;" onclick="window.close()">
+        <button class="btn btn-secondary" onclick="window.close()">
           Close Window
         </button>
 
@@ -257,11 +258,6 @@ const createPaymentURLForWindow = (orderId, formData) => {
     </body>
     </html>
   `;
-
-  const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlContent);
-
-  console.log('📋 Payment instructions page created for popup');
-  return dataUrl;
 };
 
 // Redirect to real payment page
