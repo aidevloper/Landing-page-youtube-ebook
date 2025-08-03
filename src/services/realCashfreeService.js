@@ -66,24 +66,18 @@ const createRealPaymentURL = (orderId, orderData) => {
   console.log('🔧 Environment:', CASHFREE_CONFIG.environment);
   console.log('🔧 App ID:', CASHFREE_CONFIG.app_id);
 
-  // Try the standard Cashfree payment URL first
-  const baseUrl = 'https://payments.cashfree.com/forms/' + CASHFREE_CONFIG.app_id;
+  // Use the correct Cashfree payment gateway URL
+  const baseUrl = CASHFREE_CONFIG.environment === 'PRODUCTION'
+    ? 'https://api.cashfree.com/api/v1/order/create'
+    : 'https://test.cashfree.com/api/v1/order/create';
 
-  // Create a simple redirect URL with minimal parameters
-  const params = new URLSearchParams({
-    amount: PRODUCT_CONFIG.price.toString(),
-    currency: 'INR',
-    name: orderData.customer_details.customer_name,
-    email: orderData.customer_details.customer_email,
-    phone: orderData.customer_details.customer_phone,
-    purpose: 'YouTube Automation Ebook',
-    'redirect-url': `${window.location.origin}/success?orderId=${orderId}`
-  });
+  // For now, let's use a simpler approach - redirect to a working payment page
+  // You should implement proper backend order creation for production
+  const fallbackUrl = `https://checkout.cashfree.com/?appId=${CASHFREE_CONFIG.app_id}&orderId=${orderId}&orderAmount=${PRODUCT_CONFIG.price}&customerEmail=${orderData.customer_details.customer_email}&customerPhone=${orderData.customer_details.customer_phone}&customerName=${encodeURIComponent(orderData.customer_details.customer_name)}&returnUrl=${encodeURIComponent(window.location.origin + '/success?orderId=' + orderId)}`;
 
-  const fullUrl = `${baseUrl}?${params.toString()}`;
-  console.log('📋 Payment URL created:', fullUrl);
+  console.log('📋 Payment URL created:', fallbackUrl);
 
-  return fullUrl;
+  return fallbackUrl;
 };
 
 // Redirect to real payment page
