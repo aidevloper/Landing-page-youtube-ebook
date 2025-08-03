@@ -54,24 +54,34 @@ export const processRealCashfreePayment = async (formData) => {
   }
 };
 
-// Create real Cashfree payment URL with proper parameters
-const createRealPaymentURL = (orderId, orderData) => {
-  console.log('🔧 Creating payment URL for order:', orderId);
-  console.log('🔧 Environment:', CASHFREE_CONFIG.environment);
-  console.log('🔧 App ID:', CASHFREE_CONFIG.app_id);
+// Create direct payment URL for Cashfree
+const createDirectPaymentURL = (orderId, orderData) => {
+  console.log('🔧 Creating direct payment URL for order:', orderId);
 
-  // Use the correct Cashfree payment gateway URL
-  const baseUrl = CASHFREE_CONFIG.environment === 'PRODUCTION'
-    ? 'https://api.cashfree.com/api/v1/order/create'
-    : 'https://test.cashfree.com/api/v1/order/create';
+  // Create a direct payment link that doesn't require a 404-prone form
+  const paymentData = {
+    appId: CASHFREE_CONFIG.app_id,
+    orderId: orderId,
+    orderAmount: PRODUCT_CONFIG.price,
+    orderCurrency: 'INR',
+    customerName: orderData.customer_details.customer_name,
+    customerEmail: orderData.customer_details.customer_email,
+    customerPhone: orderData.customer_details.customer_phone,
+    returnUrl: `${window.location.origin}/success?orderId=${orderId}`,
+    notifyUrl: `${window.location.origin}/api/webhook/cashfree`,
+    orderNote: 'YouTube Automation Ebook Purchase'
+  };
 
-  // For now, let's use a simpler approach - redirect to a working payment page
-  // You should implement proper backend order creation for production
-  const fallbackUrl = `https://checkout.cashfree.com/?appId=${CASHFREE_CONFIG.app_id}&orderId=${orderId}&orderAmount=${PRODUCT_CONFIG.price}&customerEmail=${orderData.customer_details.customer_email}&customerPhone=${orderData.customer_details.customer_phone}&customerName=${encodeURIComponent(orderData.customer_details.customer_name)}&returnUrl=${encodeURIComponent(window.location.origin + '/success?orderId=' + orderId)}`;
+  // Use Cashfree's payment URL with proper encoding
+  const params = new URLSearchParams();
+  Object.keys(paymentData).forEach(key => {
+    params.append(key, paymentData[key]);
+  });
 
-  console.log('📋 Payment URL created:', fallbackUrl);
+  const paymentUrl = `https://test.cashfree.com/billpay/checkout/post/submit?${params.toString()}`;
 
-  return fallbackUrl;
+  console.log('📋 Direct payment URL created:', paymentUrl);
+  return paymentUrl;
 };
 
 // Redirect to real payment page
