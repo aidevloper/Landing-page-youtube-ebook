@@ -42,7 +42,8 @@ const createAndSubmitPaymentForm = (orderId, formData) => {
   // Create a hidden form that submits to Cashfree
   const form = document.createElement('form');
   form.method = 'POST';
-  form.action = 'https://test.cashfree.com/billpay/checkout/post/submit';
+  // Use production endpoint since you have a production App ID
+  form.action = 'https://www.cashfree.com/checkout/post/submit';
   form.target = '_self';
 
   // Payment parameters
