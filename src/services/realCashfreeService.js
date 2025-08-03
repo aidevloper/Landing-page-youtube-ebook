@@ -35,27 +35,74 @@ export const processRealCashfreePayment = async (formData) => {
   }
 };
 
-// Create direct payment URL for Cashfree
-const createDirectPaymentURL = (orderId, orderData) => {
-  console.log('🔧 Creating direct payment URL for order:', orderId);
+// Create and submit payment form to Cashfree
+const createAndSubmitPaymentForm = (orderId, formData) => {
+  console.log('🔧 Creating payment form for order:', orderId);
 
-  // Show user the payment information and let them continue to Cashfree manually
-  const paymentInfo = {
+  // Create a hidden form that submits to Cashfree
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = 'https://test.cashfree.com/billpay/checkout/post/submit';
+  form.target = '_self';
+
+  // Payment parameters
+  const params = {
+    appId: CASHFREE_CONFIG.app_id,
     orderId: orderId,
-    amount: PRODUCT_CONFIG.price,
-    currency: 'INR',
-    customerName: orderData.customer_details.customer_name,
-    customerEmail: orderData.customer_details.customer_email,
-    customerPhone: orderData.customer_details.customer_phone
+    orderAmount: PRODUCT_CONFIG.price,
+    orderCurrency: 'INR',
+    orderNote: 'YouTube Automation Ebook Purchase',
+    customerName: `${formData.firstName} ${formData.lastName}`,
+    customerEmail: formData.email,
+    customerPhone: formData.phone,
+    returnUrl: `${window.location.origin}/success?orderId=${orderId}`,
+    notifyUrl: `${window.location.origin}/api/webhook/cashfree`,
+    paymentModes: 'cc,dc,nb,upi,wallet'
   };
 
-  console.log('📋 Payment info:', paymentInfo);
+  // Create hidden input fields
+  Object.keys(params).forEach(key => {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = params[key];
+    form.appendChild(input);
+  });
 
-  // For now, show an alert with payment details and ask user to visit Cashfree dashboard
-  alert(`Payment Processing\n\nOrder ID: ${orderId}\nAmount: ₹${PRODUCT_CONFIG.price}\n\nPlease contact support to complete your payment.\nEmail: support@youtubeautomation.com`);
+  // Add form to document and submit
+  document.body.appendChild(form);
 
-  // Return to success page for now
-  return `${window.location.origin}/success?orderId=${orderId}&status=pending`;
+  console.log('📋 Submitting payment form with params:', params);
+
+  // Show loading message
+  const loadingDiv = document.createElement('div');
+  loadingDiv.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-family: Arial, sans-serif;
+    ">
+      <div style="text-align: center;">
+        <div style="font-size: 24px; margin-bottom: 10px;">🔄 Processing Payment...</div>
+        <div style="font-size: 16px;">Redirecting to Cashfree Payment Gateway</div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(loadingDiv);
+
+  // Submit form after short delay
+  setTimeout(() => {
+    form.submit();
+  }, 1000);
 };
 
 // Redirect to real payment page
