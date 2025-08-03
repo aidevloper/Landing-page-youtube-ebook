@@ -105,6 +105,31 @@ const createAndSubmitPaymentForm = (orderId, formData) => {
   }, 1000);
 };
 
+// Create payment URL for popup window
+const createPaymentURLForWindow = (orderId, formData) => {
+  console.log('🔧 Creating payment URL for popup window:', orderId);
+
+  // Payment parameters for URL
+  const params = new URLSearchParams({
+    appId: CASHFREE_CONFIG.app_id,
+    orderId: orderId,
+    orderAmount: PRODUCT_CONFIG.price,
+    orderCurrency: 'INR',
+    orderNote: 'YouTube Automation Ebook Purchase',
+    customerName: `${formData.firstName} ${formData.lastName}`,
+    customerEmail: formData.email,
+    customerPhone: formData.phone,
+    returnUrl: `${window.location.origin}/success?orderId=${orderId}`,
+    notifyUrl: `${window.location.origin}/api/webhook/cashfree`,
+    paymentModes: 'cc,dc,nb,upi,wallet'
+  });
+
+  const paymentUrl = `https://test.cashfree.com/billpay/checkout/post/submit?${params.toString()}`;
+
+  console.log('📋 Payment URL for window:', paymentUrl);
+  return paymentUrl;
+};
+
 // Redirect to real payment page
 const redirectToPayment = (paymentUrl) => {
   console.log('🔗 Redirecting to real Cashfree payment page...');
