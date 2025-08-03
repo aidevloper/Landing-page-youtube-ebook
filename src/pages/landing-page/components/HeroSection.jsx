@@ -5,6 +5,7 @@ import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   const [currentStudentCount, setCurrentStudentCount] = useState(12847);
   const [timeLeft, setTimeLeft] = useState({
     hours: 23,
