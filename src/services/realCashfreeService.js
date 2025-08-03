@@ -145,29 +145,19 @@ const redirectToPayment = (paymentUrl) => {
 export const openPaymentInNewWindow = async (formData) => {
   try {
     const orderId = generateOrderId();
-    const orderData = {
-      amount: PRODUCT_CONFIG.price,
-      currency: 'INR',
-      orderId: orderId,
-      customer_details: {
-        customer_id: `customer_${Date.now()}`,
-        customer_name: `${formData.firstName} ${formData.lastName}`,
-        customer_email: formData.email,
-        customer_phone: formData.phone
-      }
-    };
-    
-    const paymentUrl = createRealPaymentURL(orderId, orderData);
-    
+
     console.log('🪟 Opening payment in new window...');
-    
+
+    // Create payment URL for new window
+    const paymentUrl = createPaymentURLForWindow(orderId, formData);
+
     // Open in new window
     const paymentWindow = window.open(
       paymentUrl,
       'cashfree_payment',
       'width=900,height=700,scrollbars=yes,resizable=yes,toolbar=no,location=yes'
     );
-    
+
     if (!paymentWindow) {
       throw new Error('Payment popup was blocked. Please allow popups and try again.');
     }
