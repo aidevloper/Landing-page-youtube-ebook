@@ -108,7 +108,7 @@ const HeroSection = () => {
             </div>
 
             {/* Enhanced Pricing & CTA */}
-            {/* <div className="premium-card bg-white/15 backdrop-blur-md rounded-2xl p-6 mb-8 glow-effect animation-zoom-in">
+            <div className="premium-card bg-white/15 backdrop-blur-md rounded-2xl p-6 mb-8 glow-effect animation-zoom-in">
               <div className="text-center mb-4">
                 <div className="text-white/70 text-sm mb-2">Limited Time Offer Ends In:</div>
                 <div className="flex justify-center space-x-4 text-accent font-bold text-2xl">
@@ -125,25 +125,26 @@ const HeroSection = () => {
                     <div className="text-xs text-white/90">Seconds</div>
                   </div>
                 </div>
-              </div> */}
+              </div>
 
-              {/* <div className="text-center mb-6">
+              <div className="text-center mb-6">
                 <div className="text-white/70 line-through text-lg">₹1,499</div>
-                <div className="gradient-text text-4xl font-bold">₹999</div>
-                <div className="text-success text-sm font-semibold pulse-glow px-2 py-1 rounded-md">Save ₹500 Today!</div>
-              </div> */}
+                <div className="gradient-text text-4xl font-bold">₹799</div>
+                <div className="text-success text-sm font-semibold pulse-glow px-2 py-1 rounded-md">Save ₹700 Today!</div>
+              </div>
 
-              {/* <div className="space-y-3">
+              <div className="space-y-3">
                 <Button
                   variant="default"
                   fullWidth
                   className="accent-gradient hover:scale-105 text-white text-lg py-4 font-semibold shadow-lg transition-all duration-300 glow-effect"
                   iconName="CreditCard"
                   iconPosition="left"
+                  onClick={handleCheckout}
                 >
-                  Get Instant Access - ₹999
+                  Start My YouTube Empire - ₹799
                 </Button>
-                
+
                 <Button
                   variant="outline"
                   fullWidth
@@ -154,12 +155,12 @@ const HeroSection = () => {
                 >
                   Watch Free Preview
                 </Button>
-              </div> */}
-
-              {/* <div className="text-center text-white/70 text-xs mt-4">
-                Or 3 easy payments of ₹333 • 30-day money-back guarantee
               </div>
-            </div> */}
+
+              <div className="text-center text-white/70 text-xs mt-4">
+                Or 3 easy payments of ₹267 • 30-day money-back guarantee
+              </div>
+            </div>
 
             {/* Enhanced Trust Indicators */}
             <div className="flex flex-wrap justify-center lg:justify-start items-center space-x-6 text-white/80 text-sm">
