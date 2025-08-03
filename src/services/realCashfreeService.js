@@ -164,7 +164,7 @@ const createPaymentURLForWindow = (orderId, formData) => {
         <h3>Redirecting to Cashfree Payment Gateway...</h3>
         <p>Please wait while we process your request.</p>
       </div>
-      <form id="paymentForm" method="POST" action="https://test.cashfree.com/billpay/checkout/post/submit">
+      <form id="paymentForm" method="POST" action="https://www.cashfree.com/checkout/post/submit">
         ${formFields}
       </form>
       <script>
