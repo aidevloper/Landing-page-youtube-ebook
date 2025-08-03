@@ -62,37 +62,37 @@ export const processRealCashfreePayment = async (formData) => {
 
 // Create real Cashfree payment URL with proper parameters
 const createRealPaymentURL = (orderId, orderData) => {
-  // Use Cashfree's actual payment URL structure
-  const baseUrl = CASHFREE_CONFIG.environment === 'PRODUCTION' 
-    ? 'https://payments.cashfree.com/pay' 
-    : 'https://payments-test.cashfree.com/pay';
-  
-  // Required parameters for Cashfree payment
+  // Use Cashfree's current payment URL structure (API v4)
+  const baseUrl = CASHFREE_CONFIG.environment === 'PRODUCTION'
+    ? 'https://checkout.cashfree.com/pay'
+    : 'https://sandbox.cashfree.com/pay';
+
+  // Required parameters for Cashfree payment (v4 format)
   const params = new URLSearchParams({
     // Required Cashfree parameters
-    appId: CASHFREE_CONFIG.app_id,
-    orderId: orderId,
-    orderAmount: PRODUCT_CONFIG.price.toString(),
-    orderCurrency: 'INR',
-    orderNote: 'YouTube Automation Ebook Purchase',
-    
+    'cf-appid': CASHFREE_CONFIG.app_id,
+    'cf-orderid': orderId,
+    'cf-orderamount': PRODUCT_CONFIG.price.toString(),
+    'cf-ordercurrency': 'INR',
+    'cf-ordernote': 'YouTube Automation Ebook Purchase',
+
     // Customer details
-    customerName: orderData.customer_details.customer_name,
-    customerEmail: orderData.customer_details.customer_email,
-    customerPhone: orderData.customer_details.customer_phone,
-    
+    'cf-customername': orderData.customer_details.customer_name,
+    'cf-customeremail': orderData.customer_details.customer_email,
+    'cf-customerphone': orderData.customer_details.customer_phone,
+
     // Return URLs
-    returnUrl: `${window.location.origin}/success?orderId=${orderId}`,
-    notifyUrl: `${window.location.origin}/api/webhook/cashfree`,
-    
+    'cf-returnurl': `${window.location.origin}/success?orderId=${orderId}`,
+    'cf-notifyurl': `${window.location.origin}/api/webhook/cashfree`,
+
     // Additional parameters
-    paymentModes: 'cc,dc,nb,upi,paypal,wallet',
-    pc: 'web'
+    'cf-paymentmodes': 'cc,dc,nb,upi,wallet',
+    'cf-theme': 'light'
   });
-  
+
   const fullUrl = `${baseUrl}?${params.toString()}`;
   console.log('📋 Payment URL created with parameters:', Object.fromEntries(params));
-  
+
   return fullUrl;
 };
 
