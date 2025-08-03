@@ -58,30 +58,23 @@ export const processRealCashfreePayment = async (formData) => {
 const createDirectPaymentURL = (orderId, orderData) => {
   console.log('🔧 Creating direct payment URL for order:', orderId);
 
-  // Create a direct payment link that doesn't require a 404-prone form
-  const paymentData = {
-    appId: CASHFREE_CONFIG.app_id,
+  // Show user the payment information and let them continue to Cashfree manually
+  const paymentInfo = {
     orderId: orderId,
-    orderAmount: PRODUCT_CONFIG.price,
-    orderCurrency: 'INR',
+    amount: PRODUCT_CONFIG.price,
+    currency: 'INR',
     customerName: orderData.customer_details.customer_name,
     customerEmail: orderData.customer_details.customer_email,
-    customerPhone: orderData.customer_details.customer_phone,
-    returnUrl: `${window.location.origin}/success?orderId=${orderId}`,
-    notifyUrl: `${window.location.origin}/api/webhook/cashfree`,
-    orderNote: 'YouTube Automation Ebook Purchase'
+    customerPhone: orderData.customer_details.customer_phone
   };
 
-  // Use Cashfree's payment URL with proper encoding
-  const params = new URLSearchParams();
-  Object.keys(paymentData).forEach(key => {
-    params.append(key, paymentData[key]);
-  });
+  console.log('📋 Payment info:', paymentInfo);
 
-  const paymentUrl = `https://test.cashfree.com/billpay/checkout/post/submit?${params.toString()}`;
+  // For now, show an alert with payment details and ask user to visit Cashfree dashboard
+  alert(`Payment Processing\n\nOrder ID: ${orderId}\nAmount: ₹${PRODUCT_CONFIG.price}\n\nPlease contact support to complete your payment.\nEmail: support@youtubeautomation.com`);
 
-  console.log('📋 Direct payment URL created:', paymentUrl);
-  return paymentUrl;
+  // Return to success page for now
+  return `${window.location.origin}/success?orderId=${orderId}&status=pending`;
 };
 
 // Redirect to real payment page
